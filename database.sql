@@ -1,6 +1,7 @@
 -- Criar tabela profiles
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY,
+  email TEXT,
   full_name TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE
@@ -33,6 +34,9 @@ ALTER TABLE series ENABLE ROW LEVEL SECURITY;
 -- Policies para profiles
 CREATE POLICY "Users can view their own profile" ON profiles
   FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert their own profile" ON profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
 
 CREATE POLICY "Users can update their own profile" ON profiles
   FOR UPDATE USING (auth.uid() = id);

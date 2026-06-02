@@ -48,6 +48,7 @@ export default function Register() {
       if (authData.user) {
         await supabase.from("profiles").upsert({
           id: authData.user.id,
+          email: data.email,
           full_name: data.full_name,
         });
       }
